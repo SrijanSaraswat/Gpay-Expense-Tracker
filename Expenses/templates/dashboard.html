@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">Monthly Summary</h2>
+
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <input type="number" name="month" class="form-control" placeholder="Enter Month (1-12)" value="{{ month }}">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
+
+<div class="row">
+    {% for item in summary %}
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-capitalize">{{ item.category }}</h5>
+                    <h3 class="card-text text-success">₹ {{ item.total }}</h3>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted text-center">No data found for the selected month.</p>
+    {% endfor %}
+</div>
+
+<canvas id="expenseChart" class="mt-5" height="100"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+    const labels = [{% for item in summary %}'{{ item.category }}'{% if not forloop.last %}, {% endif %}{% endfor %}];
+    const data = [{% for item in summary %}{{ item.total }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+
+    const ctx = document.getElementById('expenseChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Expenses by Category',
+                data: data,
+                backgroundColor: '#0f4c81',
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'Monthly Expense Summary'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: value => '₹' + value
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}
