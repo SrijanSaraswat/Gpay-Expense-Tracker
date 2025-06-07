@@ -121,9 +121,7 @@ Gpay_Expense_Tracker/
 ├── db.sqlite3
 └── manage.py
 ```
-## Live Demo
 
-[![Visit Live Site](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=python&logoColor=white)](https://srijandoingwhat.pythonanywhere.com/)
 
 
 ## License
